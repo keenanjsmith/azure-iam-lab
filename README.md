@@ -394,3 +394,4 @@ README.md
 
 **Role‑based — Require MFA for admin roles**  
 ![MFA for admin roles](assets/CA%20%E2%80%93%20Require%20MFA%20for%20admin%20roles%20(everywhere)%20-%20Optional%20.png)
+
