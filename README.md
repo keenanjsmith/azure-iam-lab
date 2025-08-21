@@ -1,397 +1,113 @@
-# Azure Entra ID – Cloud Only Lab
+## Phase 1 – Azure Network Setup
 
-This lab gives you a complete blueprint to build your own Azure Entra ID lab for identity and access management.  It’s written so anyone can follow along, even if they’ve never set up an Entra tenant before.  Each section explains **why** you’re doing something, **where** to click, what to **do**, what to **check**, and which **screenshot** corresponds to that step.
+### Step 1 – Resource Group overview
 
-## What this lab shows
+In this step you create an Azure resource group to hold all of the project resources. The screenshot below shows the overview for the newly created resource group.
 
-- **Cloud resources** – Create a dedicated resource group and a virtual network with a subnet for any client virtual machines you may need.
-- **Entra ID identities** – Add lab users and groups and delegate a directory role using least privilege.
-- **Device join** – Register a Windows 11 device to Entra ID and verify it’s joined.
-- **Identity Protection** – Configure risk‑based sign‑in and user policies.
-- **Conditional Access** – Create baseline policies: block legacy authentication, require MFA, and define trusted locations.
+[![Phase 1 Step 1 – Resource Group overview](assets/Phase1-Step1_resource-group_overview.png)](assets/Phase1-Step1_resource-group_overview.png)
 
-## What you need
+### Step 2 – VNet & Subnet configuration
 
-- An Azure subscription with a Microsoft Entra tenant
-- Global Administrator rights on that tenant
-- A Windows 11 Pro device or virtual machine to join and test sign‑ins
-- Browser access to the Entra admin center
+Next, you configure the virtual network and subnet that the machines in this project will use. The image demonstrates the VNet and subnet settings as they were configured.
 
-## Screenshot naming and repo layout
+[![Phase 1 Step 2.2 – VNet & Subnet configuration](assets/Phase1-Step2.2_vnet_subnet_config.png)](assets/Phase1-Step2.2_vnet_subnet_config.png)
 
-Use the following convention so files sort in order:
+## Phase 2 – Identity Management
 
-```
-PhaseX‑StepY.Z_<short‑title>.png
-```
+### Step 1 – Users created list
 
-Expected repository layout:
+During Phase 2 you create a set of test users in Azure AD. Here is the list of users after creation:
 
-```
-README.md
-/assets
-  Phase1‑Step1_resource‑group_overview.png
-  Phase1‑Step2.2_vnet_subnet_config.png
-  Phase2‑Step1_users_created_list.png
-  Phase2‑Step1B_reset‑password.png
-  Phase2‑Step2_groups_members_admins.png
-  Phase2‑Step2_groups_members_users.png
-  Phase2‑Step3_role_useradmin_assigned.png
-  phase03_ca‑list.png
-  phase03_named‑locations.png
-  Phase3‑Step1_device_join_wizard.png
-  Phase3‑Step1_device_list.png
-  Phase3‑Step1_dsregcmd_status.png
-  Phase3‑Step2_CA02_BlockLegacyAuth.png
-  Phase3‑Step2_CA03_MFAforAdmins.png
-  Phase3‑Step2_ID‑Protection_Dashboard.png
-  Phase3‑Step2_Sign‑in‑Risk‑Policy_On.png
-  Phase3‑Step2_User‑Risk‑Policy_On.png
-  CA – Require MFA for admin roles (everywhere).png
-```
+[![Phase 2 Step 1 – Users created list](assets/Phase2-Step1_users_created_list.png)](assets/Phase2-Step1_users_created_list.png)
 
----
+### Step 1B – Reset password
 
-## Phase 1 – Azure core
+As part of onboarding these users, you reset one of the user passwords. The following screenshot shows the reset‑password dialog in Azure AD.
 
-### Step 1.1 – Create a resource group
+[![Phase 2 Step 1B – Reset password](assets/Phase2-Step1B_reset-password.png)](assets/Phase2-Step1B_reset-password.png)
 
-**Why:** Keep all lab resources in one place and make cleanup easy.
+### Step 2 – Group membership
 
-**Where:** Azure Portal → **Resource groups** → **Create**
+You assign the new users to appropriate groups. Two separate screenshots document the membership lists for the admins and the general users:
 
-**Do this:**
+[![Phase 2 Step 2 – Groups members (admins)](assets/Phase2-Step2_groups_members_admins.png)](assets/Phase2-Step2_groups_members_admins.png)
 
-- Name the group **IAM‑Lab‑RG**.
-- Choose a region close to you.
-- Select your subscription, then choose **Review + Create**, and **Create**.
+[![Phase 2 Step 2 – Groups members (users)](assets/Phase2-Step2_groups_members_users.png)](assets/Phase2-Step2_groups_members_users.png)
 
-**Check:** The new resource group appears with the correct name, subscription, and region.
+### Step 3 – Role assignment
 
-**Screenshot:** `assets/Phase1‑Step1_resource‑group_overview.png`
+In the final step of Phase 2 you assign the **User administrator** role to one of the accounts. The following image confirms that the role assignment was successful:
 
----
+[![Phase 2 Step 3 – Role user admin assigned](assets/Phase2-Step3_role_useradmin_assigned.png)](assets/Phase2-Step3_role_useradmin_assigned.png)
 
-### Step 1.2 – Create a virtual network and subnet
+## Phase 3 – Device join & Conditional Access
 
-**Why:** Provide a private address space for any lab client VMs.
+### Step 1 – Device join wizard
 
-**Where:** Resource group **IAM‑Lab‑RG** → **Create** → **Virtual network**
+After deploying the network and identity setup you join a Windows device to Azure AD. The device join wizard steps through the join process:
 
-**Do this:**
+[![Phase 3 Step 1 – Device join wizard](assets/Phase3-Step1_device_join_wizard.png)](assets/Phase3-Step1_device_join_wizard.png)
 
-- Name the VNet **IAM‑VNet**.
-- Set the address space, for example `10.10.0.0/16`.
-- Define a subnet named **IAM‑Subnet**, for example `10.10.1.0/24`.
-- Choose **Review + Create**, then **Create**.
+### Step 1 – Device list
 
-**Check:** The VNet and subnet exist and show the ranges you set.
+Once the device is joined, it appears in the Azure AD devices list. The screenshot below shows the list with the newly joined device highlighted:
 
-**Screenshot:** `assets/Phase1‑Step2.2_vnet_subnet_config.png`
+[![Phase 3 Step 1 – Device list](assets/Phase3-Step1_device_list.png)](assets/Phase3-Step1_device_list.png)
 
----
+### Step 1 – `dsregcmd` status
 
-## Phase 2 – Entra identity
+On the joined device you run the `dsregcmd /status` command to verify the hybrid join status. The image captures the command output confirming that the device is Azure AD joined:
 
-### Step 2.1 – Create test users
+[![Phase 3 Step 1 – `dsregcmd` status](assets/Phase3-Step1_dsregcmd_status.png)](assets/Phase3-Step1_dsregcmd_status.png)
 
-**Why:** You need non‑admin accounts to target with policies and to use for sign‑in tests.
+### Step 2 – Conditional Access policies
 
-**Where:** Entra admin center → **Identity** → **Users** → **New user**
+During the final phase you configure conditional‑access policies to protect the environment. Each policy is documented with a separate screenshot.
 
-**Do this:**
+#### ID Protection dashboard
 
-- Create **user1** through **user5** in your tenant’s `onmicrosoft.com` domain.
-- Assign each a temporary password for the lab.
+The ID Protection dashboard provides an overview of risky sign‑ins and users. Here’s what it looked like after enabling risk policies:
 
-**Check:** `user1` through `user5` appear in the Users list with the expected UPNs.
+[![Phase 3 Step 2 – ID Protection dashboard](assets/Phase3-Step2_ID-Protection_Dashboard.png)](assets/Phase3-Step2_ID-Protection_Dashboard.png)
 
-**Screenshot:** `assets/Phase2‑Step1_users_created_list.png`
+#### Sign‑in risk policy (On)
 
----
+This policy enforces additional controls when a high sign‑in risk is detected. The image shows the policy turned on:
 
-### Step 2.1b – Reset a user password
+[![Phase 3 Step 2 – Sign‑in risk policy (On)](assets/Phase3-Step2_Sign-in-Risk-Policy_On.png)](assets/Phase3-Step2_Sign-in-Risk-Policy_On.png)
 
-**Why:** Demonstrate basic onboarding and password recovery.
+#### User risk policy (On)
 
-**Where:** **Users** → select **user1** → **Reset password**
+The user risk policy requires multi‑factor authentication for users with an elevated risk. The screenshot confirms that the policy is enabled:
 
-**Do this:**
+[![Phase 3 Step 2 – User risk policy (On)](assets/Phase3-Step2_User-Risk-Policy_On.png)](assets/Phase3-Step2_User-Risk-Policy_On.png)
 
-- Generate a temporary password.
+#### Conditional Access policy list
 
-**Check:** A success banner displays a new temporary password.
+You review the list of Conditional Access policies to verify that all required policies are configured:
 
-**Screenshot:** `assets/Phase2‑Step1B_reset‑password.png`
+[![Phase 3 Step 2 – Conditional Access policy list](assets/phase03_ca-list.png)](assets/phase03_ca-list.png)
 
----
+#### Named locations
 
-### Step 2.2 – Create groups and add members
+The **Named locations** blade defines trusted IP ranges and country locations used by Conditional Access. The following screenshot shows the configured named locations:
 
-**Why:** Group‑based scope keeps policies clear and avoids one‑off assignments.
+[![Phase 3 Step 2 – Named locations](assets/phase03_named-locations.png)](assets/phase03_named-locations.png)
 
-**Where:** **Identity** → **Groups** → **New group**
+#### CA02: Block legacy authentication
 
-**Do this:**
+This Conditional Access policy blocks legacy (basic) authentication protocols to improve security:
 
-- Create two security groups: **IAM‑Admins** and **IAM‑Users**.
-- Add your admin account to **IAM‑Admins**.
-- Add `user1` through `user5` to **IAM‑Users**.
+[![Phase 3 Step 2 – CA02: Block legacy authentication](assets/Phase3-Step2_CA02_BlockLegacyAuth.png)](assets/Phase3-Step2_CA02_BlockLegacyAuth.png)
 
-**Check:** Memberships look correct in both groups.
+#### CA03: Require MFA for admin roles
 
-**Screenshot:**
+Finally, you create a policy that requires multi‑factor authentication for all administrative roles. The screenshot shows the policy configuration:
 
-- `assets/Phase2‑Step2_groups_members_admins.png`
-- `assets/Phase2‑Step2_groups_members_users.png`
+[![Phase 3 Step 2 – CA03: Require MFA for admin roles](assets/Phase3-Step2_CA03_MFAforAdmins.png)](assets/Phase3-Step2_CA03_MFAforAdmins.png)
 
----
+#### CA – Require MFA for admin roles (everywhere)
 
-### Step 2.3 – Assign a directory role
+In some environments you may need a tenant‑wide policy that enforces multi‑factor authentication for admin roles across all scopes. The screenshot below shows the **Require MFA for admin roles (everywhere)** policy configuration:
 
-**Why:** Apply least privilege by delegating only the rights needed for user management.
-
-**Where:** **Identity** → **Roles and administrators** → **User Administrator** → **Assignments** → **Add assignment**
-
-**Do this:**
-
-- Assign the **User Administrator** role to your admin account, or to the **IAM‑Admins** group if role‑assignable groups are available in your tenant.
-
-**Check:** The assignment appears under the role with the correct principal and scope.
-
-**Screenshot:** `assets/Phase2‑Step3_role_useradmin_assigned.png`
-
----
-
-## Phase 3 – Device enrollment
-
-### Step 3.1 – Join a Windows 11 device to Entra ID
-
-**Why:** Device trust is a requirement for many Conditional Access rules.
-
-**Where:** Windows 11 → **Settings** → **Accounts** → **Access work or school** → **Connect** → **Join this device to Microsoft Entra**
-
-**Do this:**
-
-- Sign in with an account that’s allowed to join devices in your tenant.
-- Complete the join wizard and restart if prompted.
-
-**Check:**
-
-- In Entra, go to **Identity** → **Devices** and ensure the device is listed as **Microsoft Entra joined**.
-- Open an elevated Command Prompt on the device and run `dsregcmd /status`.  Look for `AzureAdJoined : YES` and a successful device authentication status.
-
-**Screenshot:**
-
-- `assets/Phase3‑Step1_device_join_wizard.png`
-- `assets/Phase3‑Step1_device_list.png`
-- `assets/Phase3‑Step1_dsregcmd_status.png`
-
----
-
-## Phase 3 – Identity Protection
-
-### Step 3.2 – Open the Identity Protection dashboard
-
-**Why:** This is where Microsoft surfaces risk detections and lets you configure risk policies.
-
-**Where:** **Protection** → **Identity Protection** → **Dashboard**
-
-**Check:** Tiles for detections, risky users, and policies are present.
-
-**Screenshot:** `assets/Phase3‑Step2_ID‑Protection_Dashboard.png`
-
----
-
-### Step 3.2 – Configure risk policies
-
-**Why:** Use risk signals to add MFA or force a password change when appropriate.
-
-**Where:** **Identity Protection** → **Sign‑in risk policy** and **User risk policy**
-
-**Do this:**
-
-- For the **Sign‑in risk policy**, include the **IAM‑Users** group, set the control to **Require MFA**, and choose **On** or **Report‑only** to test.
-- For the **User risk policy**, include the **IAM‑Users** group, set the control to **Require password change**, and choose **On** or **Report‑only** to test.
-
-**Check:** Each policy shows the correct target group and the control you selected.
-
-**Screenshot:**
-
-- `assets/Phase3‑Step2_Sign‑in‑Risk‑Policy_On.png`
-- `assets/Phase3‑Step2_User‑Risk‑Policy_On.png`
-
----
-
-## Phase 3 – Conditional Access
-
-### Named locations and policy list
-
-**Why:** Trusted locations allow safe exceptions, and the policy list gives a high‑level view of what’s enabled.
-
-**Where:** **Protection** → **Conditional Access** → **Named locations**, then **Policies**
-
-**Do this:**
-
-- Add a Named location for your home IP range and mark it as trusted.
-- Open the **Policies** blade to view the full list of Conditional Access policies.
-
-**Check:** The trusted location is present and the policies list loads.
-
-**Screenshot:**
-
-- `assets/phase03_named‑locations.png`
-- `assets/phase03_ca‑list.png`
-
----
-
-### CA02 – Block legacy authentication
-
-**Why:** Legacy clients can’t perform MFA; blocking them reduces attack surface.
-
-**Where:** **Conditional Access** → **Policies** → **New policy**
-
-**Do this:**
-
-- Name the policy **CA02 Block Legacy Auth**.
-- Users: include the **IAM‑Users** group.
-- Cloud apps: **All cloud apps**.
-- Conditions: **Client apps**, select only **Legacy authentication clients**.
-- Grant: **Block access**.
-- Enable: **On**, or **Report‑only** if testing.
-
-**Check:** The policy shows the legacy client condition and is enabled as configured.
-
-**Screenshot:** `assets/Phase3‑Step2_CA02_BlockLegacyAuth.png`
-
----
-
-### CA03 – Require MFA for Admins
-
-**Why:** Admin accounts need stronger authentication to mitigate misuse.
-
-**Where:** **Conditional Access** → **Policies**
-
-**Do this:**
-
-- Name the policy **CA03 Require MFA for Admins**.
-- Users: include your admin account or the **IAM‑Admins** group.
-- Cloud apps: **All cloud apps**.
-- Grant: **Require multifactor authentication**.
-- Enable: **On**.
-
-**Check:** The assignments and grant control align with the intended design.
-
-**Screenshot:** `assets/Phase3‑Step2_CA03_MFAforAdmins.png`
-
----
-
-### Role‑based – Require MFA for admin roles
-
-**Why:** Protects directory roles themselves so that any user assigned to those roles must satisfy MFA.
-
-**Where:** **Conditional Access** → **Policies**
-
-**Do this:**
-
-- Create a policy targeting selected directory roles (for example **Global Administrator** and **User Administrator**).
-- Grant: **Require MFA**.
-- Enable: **On**.
-
-**Check:** The policy shows role‑based targeting with the MFA requirement.
-
-**Screenshot:** `assets/CA – Require MFA for admin roles (everywhere).png`
-
----
-
-## Screenshot checklist
-
-- `Phase1‑Step1_resource‑group_overview.png` – Resource group created with name, subscription and region
-- `Phase1‑Step2.2_vnet_subnet_config.png` – VNet and subnet with CIDR ranges
-- `Phase2‑Step1_users_created_list.png` – Test users (`user1`‑`user5`) created
-- `Phase2‑Step1B_reset‑password.png` – Password reset success banner
-- `Phase2‑Step2_groups_members_admins.png` – `IAM‑Admins` membership verified
-- `Phase2‑Step2_groups_members_users.png` – `IAM‑Users` membership verified
-- `Phase2‑Step3_role_useradmin_assigned.png` – User Administrator role assignment
-- `phase03_ca‑list.png` – Inventory of Conditional Access policies
-- `phase03_named‑locations.png` – Trusted Home IP configured
-- `Phase3‑Step1_device_join_wizard.png` – Device join wizard
-- `Phase3‑Step1_device_list.png` – Device object visible in Entra
-- `Phase3‑Step1_dsregcmd_status.png` – `AzureAdJoined : YES` and device auth success
-- `Phase3‑Step2_CA02_BlockLegacyAuth.png` – Legacy clients blocked
-- `Phase3‑Step2_CA03_MFAforAdmins.png` – Admin MFA policy
-- `Phase3‑Step2_ID‑Protection_Dashboard.png` – Identity Protection home
-- `Phase3‑Step2_Sign‑in‑Risk‑Policy_On.png` – Sign‑in risk policy configured
-- `Phase3‑Step2_User‑Risk‑Policy_On.png` – User risk policy configured
-- `CA – Require MFA for admin roles (everywhere).png` – Role‑based MFA policy
-
----
-
-## Tips
-
-- Always confirm the tenant name displayed in the portal header before making changes.
-- Start new Conditional Access and Identity Protection policies in **Report‑only** mode, review sign‑in logs, then switch to **On** once validated.
-- Keep a single “break‑glass” admin account excluded from Conditional Access and risk policies and protect it with a strong, unique password stored offline.
-
-
-## Evidence (by phase & step)
-
-### Phase 1 — Azure core
-**Step 1.1 — Resource group**  
-![Resource group](assets/Phase1-Step1_resource-group_overview.png)
-
-**Step 1.2 — VNet & Subnet**  
-![VNet & Subnet](assets/Phase1-Step2.2_vnet_subnet_config.png)
-
-### Phase 2 — Entra identity
-**Step 2.1 — Users created**  
-![Users created](assets/Phase2-Step1_users_created_list.png)
-
-**Step 2.1b — Reset password**  
-![Reset password](assets/Phase2-Step1B_reset-password.png)
-
-**Step 2.2 — Group: IAM‑Admins (members)**  
-![IAM‑Admins members](assets/Phase2-Step2_groups_members_admins.png)
-
-**Step 2.2 — Group: IAM‑Users (members)**  
-![IAM‑Users members](assets/Phase2-Step2_groups_members_users.png)
-
-**Step 2.3 — Role assignment: User Administrator**  
-![Role assignment](assets/Phase2-Step3_role_useradmin_assigned.png)
-
-### Phase 3 — Device enrollment
-**Step 3.1 — Join wizard**  
-![Join wizard](assets/Phase3-Step1_device_join_wizard.png)
-
-**Step 3.1 — Device shows in Entra**  
-![Device list](assets/Phase3-Step1_device_list.png)
-
-**Step 3.1 — dsregcmd status**  
-![dsregcmd](assets/Phase3-Step1_dsregcmd_status.png)
-
-### Phase 3 — Identity Protection
-**Dashboard**  
-![ID Protection Dashboard](assets/Phase3-Step2_ID-Protection_Dashboard.png)
-
-**Sign‑in risk policy**  
-![Sign‑in risk policy](assets/Phase3-Step2_Sign-in-Risk-Policy_On.png)
-
-**User risk policy**  
-![User risk policy](assets/Phase3-Step2_User-Risk-Policy_On.png)
-
-### Phase 3 — Conditional Access
-**Policy list**  
-![CA list](assets/phase03_ca-list.png)
-
-**Named locations**  
-![Named locations](assets/phase03_named-locations.png)
-
-**CA02 — Block legacy authentication**  
-![Block legacy auth](assets/Phase3-Step2_CA02_BlockLegacyAuth.png)
-
-**CA03 — Require MFA for Admins**  
-![Require MFA for Admins](assets/Phase3-Step2_CA03_MFAforAdmins.png)
-
-**Role‑based — Require MFA for admin roles**  
-![MFA for admin roles](assets/CA%20%E2%80%93%20Require%20MFA%20for%20admin%20roles%20(everywhere)%20-%20Optional%20.png)
-
+[![CA – Require MFA for admin roles (everywhere)](assets/CA - Require MFA for admin roles (everywhere).png)](assets/CA - Require MFA for admin roles (everywhere).png)
