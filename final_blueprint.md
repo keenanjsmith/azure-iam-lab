@@ -332,3 +332,43 @@ README.md
 - Always confirm the tenant name displayed in the portal header before making changes.
 - Start new Conditional Access and Identity Protection policies in **Report‑only** mode, review sign‑in logs, then switch to **On** once validated.
 - Keep a single “break‑glass” admin account excluded from Conditional Access and risk policies and protect it with a strong, unique password stored offline.
+
+
+## Evidence quick view (thumbnails)
+
+<p>
+  <img src="assets/Phase1-Step1_resource-group_overview.png" width="340">
+  <img src="assets/Phase1-Step2.2_vnet_subnet_config.png" width="340">
+</p>
+<p>
+  <img src="assets/Phase2-Step1_users_created_list.png" width="340">
+  <img src="assets/Phase2-Step1B_reset-password.png" width="340">
+</p>
+<p>
+  <img src="assets/Phase2-Step2_groups_members_admins.png" width="340">
+  <img src="assets/Phase2-Step2_groups_members_users.png" width="340">
+</p>
+<p>
+  <img src="assets/Phase2-Step3_role_useradmin_assigned.png" width="340">
+  <img src="assets/Phase3-Step1_device_join_wizard.png" width="340">
+</p>
+<p>
+  <img src="assets/Phase3-Step1_device_list.png" width="340">
+  <img src="assets/Phase3-Step1_dsregcmd_status.png" width="340">
+</p>
+<p>
+  <img src="assets/Phase3-Step2_ID-Protection_Dashboard.png" width="340">
+  <img src="assets/Phase3-Step2_Sign-in-Risk-Policy_On.png" width="340">
+</p>
+<p>
+  <img src="assets/Phase3-Step2_User-Risk-Policy_On.png" width="340">
+  <img src="assets/phase03_ca-list.png" width="340">
+</p>
+<p>
+  <img src="assets/phase03_named-locations.png" width="340">
+  <img src="assets/Phase3-Step2_CA02_BlockLegacyAuth.png" width="340">
+</p>
+<p>
+  <img src="assets/Phase3-Step2_CA03_MFAforAdmins.png" width="340">
+  <img src="assets/CA%20%E2%80%93%20Require%20MFA%20for%20admin%20roles%20%28everywhere%29%20-%20Optional%20.png" width="340">
+</p>
