@@ -1,3 +1,22 @@
+# Azure Entra ID – Cloud Only Lab
+
+This lab gives you a complete blueprint to build your own Azure Entra ID lab for identity and access management. It’s written so anyone can follow along, even if they’ve never set up an Entra tenant before. Each section explains **why** you’re doing something, **where** to click, **what** to do, **what** to check, and which **screenshot** corresponds to that step.
+
+## What this lab shows
+
+- **Cloud resources** – Create a dedicated resource group and a virtual network with a subnet for any client virtual machines you may need.
+- **Entra ID identities** – Add lab users and groups and delegate a directory role using least privilege.
+- **Device join** – Register a Windows 11 device to Entra ID and verify it’s joined.
+- **Identity Protection** – Configure risk-based sign-in and user policies.
+- **Conditional Access** – Create baseline policies: block legacy authentication, require MFA, and define trusted locations.
+
+## What you need
+
+- An Azure subscription with a Microsoft Entra tenant.
+- Global Administrator rights on that tenant.
+- A Windows 11 Pro device or virtual machine to join and test sign-ins.
+- Browser access to the Entra admin center.
+
 ## Phase 1 – Azure Network Setup
 
 ### Step 1 – Resource Group overview
