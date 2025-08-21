@@ -332,3 +332,65 @@ README.md
 - Always confirm the tenant name displayed in the portal header before making changes.
 - Start new Conditional Access and Identity Protection policies in **Report‑only** mode, review sign‑in logs, then switch to **On** once validated.
 - Keep a single “break‑glass” admin account excluded from Conditional Access and risk policies and protect it with a strong, unique password stored offline.
+
+
+## Evidence (by phase & step)
+
+### Phase 1 — Azure core
+**Step 1.1 — Resource group**  
+![Resource group](assets/Phase1-Step1_resource-group_overview.png)
+
+**Step 1.2 — VNet & Subnet**  
+![VNet & Subnet](assets/Phase1-Step2.2_vnet_subnet_config.png)
+
+### Phase 2 — Entra identity
+**Step 2.1 — Users created**  
+![Users created](assets/Phase2-Step1_users_created_list.png)
+
+**Step 2.1b — Reset password**  
+![Reset password](assets/Phase2-Step1B_reset-password.png)
+
+**Step 2.2 — Group: IAM‑Admins (members)**  
+![IAM‑Admins members](assets/Phase2-Step2_groups_members_admins.png)
+
+**Step 2.2 — Group: IAM‑Users (members)**  
+![IAM‑Users members](assets/Phase2-Step2_groups_members_users.png)
+
+**Step 2.3 — Role assignment: User Administrator**  
+![Role assignment](assets/Phase2-Step3_role_useradmin_assigned.png)
+
+### Phase 3 — Device enrollment
+**Step 3.1 — Join wizard**  
+![Join wizard](assets/Phase3-Step1_device_join_wizard.png)
+
+**Step 3.1 — Device shows in Entra**  
+![Device list](assets/Phase3-Step1_device_list.png)
+
+**Step 3.1 — dsregcmd status**  
+![dsregcmd](assets/Phase3-Step1_dsregcmd_status.png)
+
+### Phase 3 — Identity Protection
+**Dashboard**  
+![ID Protection Dashboard](assets/Phase3-Step2_ID-Protection_Dashboard.png)
+
+**Sign‑in risk policy**  
+![Sign‑in risk policy](assets/Phase3-Step2_Sign-in-Risk-Policy_On.png)
+
+**User risk policy**  
+![User risk policy](assets/Phase3-Step2_User-Risk-Policy_On.png)
+
+### Phase 3 — Conditional Access
+**Policy list**  
+![CA list](assets/phase03_ca-list.png)
+
+**Named locations**  
+![Named locations](assets/phase03_named-locations.png)
+
+**CA02 — Block legacy authentication**  
+![Block legacy auth](assets/Phase3-Step2_CA02_BlockLegacyAuth.png)
+
+**CA03 — Require MFA for Admins**  
+![Require MFA for Admins](assets/Phase3-Step2_CA03_MFAforAdmins.png)
+
+**Role‑based — Require MFA for admin roles**  
+![MFA for admin roles](assets/CA%20%E2%80%93%20Require%20MFA%20for%20admin%20roles%20(everywhere)%20-%20Optional%20.png)
