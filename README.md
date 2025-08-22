@@ -60,7 +60,9 @@ On the joined device you run the `dsregcmd /status` command to verify the hybrid
 
 [![Phase 3 Step 1 – `dsregcmd` status](assets/Phase3-Step1_dsregcmd_status.png)](assets/Phase3-Step1_dsregcmd_status.png)
 
-### Step 2 – Conditional Access policies
+#
+
+## Step 2 – Conditional Access policies
 
 During the final phase you configure conditional‑access policies to protect the environment. Each policy is documented with a separate screenshot.
 
@@ -92,6 +94,7 @@ You review the list of Conditional Access policies to verify that all required p
 
 The **Named locations** blade defines trusted IP ranges and country locations used by Conditional Access. The following screenshot shows the configured named locations:
 
+
 [![Phase 3 Step 2 – Named locations](assets/phase03_named-locations.png)](assets/phase03_named-locations.png)
 
 #### CA02: Block legacy authentication
@@ -110,4 +113,4 @@ Finally, you create a policy that requires multi‑factor authentication for all
 
 In some environments you may need a tenant‑wide policy that enforces multi‑factor authentication for admin roles across all scopes. The screenshot below shows the **Require MFA for admin roles (everywhere)** policy configuration:
 
-[![CA – Require MFA for admin roles (everywhere)](assets/CA%20-%20Require%20MFA%20for%20admin%20roles%20%28everywhere%29.png)](assets/CA%20-%20Require%20MFA%20for%20admin%20roles%20%28everywhere%29.png)
+[![CA[![CA \u2013 Require MFA for admin roles (everywhere)](assets/CA%20-%20Require%20MFA%20for%20admin%20roles%20%28everywhere%29.png)](assets/CA%20-%20Require%20MFA%20for%20admin%20roles%20%28everywhere%29.png)
