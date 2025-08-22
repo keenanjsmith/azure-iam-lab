@@ -113,4 +113,5 @@ Finally, you create a policy that requires multi‑factor authentication for all
 
 In some environments you may need a tenant‑wide policy that enforces multi‑factor authentication for admin roles across all scopes. The screenshot below shows the **Require MFA for admin roles (everywhere)** policy configuration:
 
-[![CA – Require MFA for admin roles (everywhere)](assets/CA - Require MFA for admin roles (everywhere).png)](assets/CA - Require MFA for admin roles (everywhere).png)
+![CA – Require MFA for admin roles (everywhere)](assets/CA-Require-MFA-for-admin-roles-everywhere.png)
+
